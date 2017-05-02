@@ -1,0 +1,26 @@
+---
+- block:
+  # TODO: Ideally we'd write a Python module which finds the latest version, so we
+  # don't have to maintain the signal_cli_version var ourselves.
+  - name: Download signal-cli v{{ signal_cli_version }}.
+    get_url:
+      url: "{{ item }}"
+      dest: /opt/{{ item | basename }}
+      checksum: "{{ signal_cli_checksum }}"
+    with_items:
+      - "{{ signal_cli_url }}"
+
+  - name: Unarchive signal-cli v{{ signal_cli_version }}.
+    unarchive:
+      src: /opt/{{ signal_cli_url | basename }}
+      remote_src: True
+      dest: /opt/
+      creates: /opt/signal-cli-{{ signal_cli_version }}
+
+  - name: Create /usr/local/bin/signal-cli symlink.
+    file:
+      state: link
+      src: /opt/signal-cli-{{ signal_cli_version }}/bin/signal-cli
+      dest: /usr/local/bin/signal-cli
+
+  become: True

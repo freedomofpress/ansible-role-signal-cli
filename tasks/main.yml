@@ -1,0 +1,3 @@
+---
+- include: download_install_signal_cli.yml
+- include: register_signal_number.yml
