@@ -1,3 +1,5 @@
 ---
 - include: download_install_signal_cli.yml
+
 - include: register_signal_number.yml
+  when: signal_cli_register
